@@ -1,0 +1,6 @@
+appdirs==1.4.4
+autopep8==1.5.5
+click==7.1.2
+pycodestyle==2.6.0
+PyYAML==5.4.1
+toml==0.10.2
