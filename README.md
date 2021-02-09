@@ -11,7 +11,7 @@ This project require next tools:
 After install docker need add your user to docker group and logout/login to you system, see [instruction](https://docs.docker.com/engine/install/linux-postinstall/)
 ## How to use
 
-Go to your drupal project directory, navigate to the `web` directory where the` index.php` file is located, and run `drupal-dockerizer init` in terminal to create a drupal dockerizer configuration placed in the root directory of the drupal project named .drupal -dockerizer.yml. Now you can change the configuration in this file. For more information see [Drupal Dockerizer Repository] (https://github.com/jet-dev-team/drupal-dockerizer)
+Go to your drupal project directory, navigate to the `web` directory where the` index.php` file is located, and run `drupal-dockerizer init` in terminal to create a drupal dockerizer configuration placed in the root directory of the drupal project named `.drupal -dockerizer.yml`. Now you can change the configuration in this file. For more information see [Drupal Dockerizer Repository](https://github.com/jet-dev-team/drupal-dockerizer)
 
 To create docker containers, run `drupal-dockerizer up` inside any directory in your drupal project. After running this command, you can work with drupal, for example, you can install drupal site by running command `drupal-dockerizer drush si --account-pass = admin --site-name = Drupal -y`
 
