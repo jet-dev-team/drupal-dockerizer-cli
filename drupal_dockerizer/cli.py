@@ -253,7 +253,7 @@ def drush(command, conf_path=None):
 @click.argument('command', nargs=-1, type=click.UNPROCESSED)
 def composer(command):
     '''
-    Execute drush command in drupal container
+    Run composer inside docker conteiner
     '''
     os.system(f'docker run --rm --interactive --tty '
               f'--volume $PWD:/app '
