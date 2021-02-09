@@ -142,15 +142,6 @@ def __up_project(force=False, conf_path=None):
     if not conf_path:
         conf_path = findConfigPath(CURRENT_DIR)
     conf = DockerizerConfig(CURRENT_DIR, conf_path)
-    if conf.data['advanced_networking']:
-        if check_socket(f'192.168.{ conf.data["network_id"]}.10', 80):
-            raise ConnectionError(
-                f'Address 192.168.{ conf.data["network_id"]}.10 is busy.')
-    elif conf.data['ssl_enabled']:
-        checkLocalhostPort(80)
-        checkLocalhostPort(443)
-    else:
-        checkLocalhostPort(80)
     if not force and conf.data['compose_project_name'] in list(app_config.data['projects'].keys()):
         pl = Pull('up.yml', conf_path, tag)
     else:
