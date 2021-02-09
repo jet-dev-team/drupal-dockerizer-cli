@@ -174,6 +174,17 @@ def up_project(force):
     return __up_project(force)
 
 
+@cli.command('import-db')
+@click.argument('filename', type=click.Path(exists=True, resolve_path=True))
+def import_db(filename):
+    '''
+    Import database from sql file
+    '''
+    conf_path = findConfigPath(CURRENT_DIR)
+    pl = Pull('db.yml', conf_path, tag)
+    pl.run()
+
+
 def __down_project(conf_path=None):
     '''
      Remove all containers and runtime(databases, search indexes, logs, etc.), ask sudo(BECOME) password
