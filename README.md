@@ -30,7 +30,7 @@ Run `pip install -r requirements.txt` for install dependency
 Command for build pip package: `python3 setup.py sdist bdist_wheel`
 Go to `dist` folder now you can install package to your system by run `pip intall drupal_dockerizer-*.whl`
 
-## Build package in docker:
+### Build package in docker:
 
 Buid image: `docker build -t drupal_dockerizer .`
 
