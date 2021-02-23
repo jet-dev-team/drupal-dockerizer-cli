@@ -172,6 +172,9 @@ def import_db(filename):
     Import database from sql file
     '''
     conf_path = findConfigPath(CURRENT_DIR)
+    conf = DockerizerConfig(CURRENT_DIR, conf_path)
+    conf.data['db_dump_path'] = filename
+    conf.save()
     pl = Pull('db.yml', conf_path, tag)
     pl.run()
 
