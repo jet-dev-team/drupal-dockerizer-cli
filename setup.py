@@ -20,7 +20,8 @@ setuptools.setup(
     install_requires=[
         'Click',
         'appdirs',
-        'PyYAML'
+        'PyYAML',
+        'wheel'
     ],
     packages=setuptools.find_packages(),
     classifiers=[

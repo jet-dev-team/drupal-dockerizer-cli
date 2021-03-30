@@ -22,7 +22,8 @@ class AppConfig():
         if not os.path.exists(self.config_file_path):
           self.data = {
               'is_check_requirements_tools': False,
-              'version': 0.1
+              'version': 0.1,
+              'projects': {}
           }
           self.save()
         self.load()
