@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import sys
+from sys import platform
 import json
 from pprint import pprint
 import os
@@ -72,6 +73,10 @@ def init(php, solr, solr_configs, memcache, adminer, network, ssl_cert, ssl_key,
     if php:
         conf.data['phpversion'] = php
     conf.data['user_uid'] = os.getuid()
+    conf.data['user_gid'] = os.getgid()
+    # Fix for mac os platform
+    if platform == "darwin":
+         conf.data['user_gid'] = 201
     conf.data['drupal_root_dir'] = str(drupal_root_dir)
     conf.data['compose_project_name'] = str(CURRENT_DIR.parts[-2])
     conf.data['docker_runtime_dir'] = conf.data['compose_project_name']
