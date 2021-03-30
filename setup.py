@@ -9,7 +9,7 @@ setuptools.setup(
         [console_scripts]
         drupal-dockerizer=drupal_dockerizer.cli:cli
     ''',
-    version="0.0.2",
+    version="0.0.3",
     author="Vladislav Sadretdinov",
     author_email="svicervlad@gmail.com",
     description="Cli tool for up drupal projects in docker containers",
