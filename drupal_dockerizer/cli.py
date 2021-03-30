@@ -19,7 +19,7 @@ if not _PY_MIN:
                      ''.join(sys.version.splitlines()))
 
 app_config = AppConfig()
-tag = 'pre-release'
+tag = '2.0.0'
 requirements_tools = ['docker', 'docker-compose', 'git']
 
 if not app_config.data['is_check_requirements_tools']:
