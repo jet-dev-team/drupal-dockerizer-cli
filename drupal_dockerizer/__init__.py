@@ -6,13 +6,13 @@ from drupal_dockerizer.network import check_socket, getNetworkId, checkLocalhost
 from drupal_dockerizer.cli import cli
 
 __all__ = [
-    'AppConfig',
-    'DockerizerConfig',
-    'check_tool',
-    'Pull',
-    'findConfigPath',
-    'check_socket',
-    'getNetworkId',
-    'checkLocalhostPort',
-    'cli'
-    ]
+    "AppConfig",
+    "DockerizerConfig",
+    "check_tool",
+    "Pull",
+    "findConfigPath",
+    "check_socket",
+    "getNetworkId",
+    "checkLocalhostPort",
+    "cli",
+]
