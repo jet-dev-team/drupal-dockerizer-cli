@@ -19,7 +19,7 @@ from drupal_dockerizer.dockerizer_config import CONFIG_NAME
 
 sys.tracebacklimit = 0
 
-_PY3_MIN = sys.version_info[:2] >= (3, 6)
+_PY3_MIN = sys.version_info[:2] >= (3, 8)
 _PY_MIN = _PY3_MIN
 if not _PY_MIN:
     raise SystemExit(
