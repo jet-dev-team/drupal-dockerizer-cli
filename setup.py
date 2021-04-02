@@ -17,12 +17,12 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/jet-dev-team/drupal-dockerizer-cli",
     include_package_data=True,
-    install_requires=["Click", "appdirs", "PyYAML", "wheel"],
+    install_requires=["Click", "appdirs", "PyYAML", "wheel", "requests", "tabulate"],
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.8",
 )

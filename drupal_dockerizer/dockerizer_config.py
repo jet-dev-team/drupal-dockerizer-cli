@@ -1,9 +1,8 @@
 import os
-import appdirs
 from pathlib import Path
 import yaml
 
-CONFIG_NAME = ".drupal_dockerizer.yml"
+CONFIG_NAME = "config.yml"
 CONFIG_NOT_FOUND_MESSAGE = (
     "Can`t find config. Please ensure that config exist in project."
 )
@@ -60,7 +59,7 @@ class DockerizerConfig:
             self.config_file_path = config_file_path
         if load:
             if os.path.exists(self.config_file_path):
-                self.load()
+                self.load(config_file_path=self.config_file_path)
             else:
                 raise FileNotFoundError(CONFIG_NOT_FOUND_MESSAGE)
 
