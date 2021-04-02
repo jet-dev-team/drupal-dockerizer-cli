@@ -1,22 +1,23 @@
 #!/usr/bin/python3
 import sys
 import json
-from pprint import pprint
 import os
 import platform
 import click
 from pathlib import Path
+from tabulate import tabulate
 from drupal_dockerizer import (
     AppConfig,
     check_tool,
-    Pull,
+    Playbook,
     DockerizerConfig,
     findConfigPath,
     getNetworkId,
 )
+from drupal_dockerizer.dockerizer import initRepository
 from drupal_dockerizer.dockerizer_config import CONFIG_NAME
 
-sys.tracebacklimit = 1
+sys.tracebacklimit = 0
 
 _PY3_MIN = sys.version_info[:2] >= (3, 6)
 _PY_MIN = _PY3_MIN
@@ -192,10 +193,12 @@ def init(
         json.dump(debug_config, file_write, indent=2)
         file_write.close()
         click.echo(
-            f'Debug settings for vscode generate on path {str(vscode_dir.joinpath("launch.json"))}'
+            f'Debug settings for vscode generated on path {str(vscode_dir.joinpath("launch.json"))}'
         )
-    click.echo("Config generated with settings:")
-    pprint(conf.data)
+    click.echo("Config generated.")
+    os.chdir(str(drupal_root_dir))
+    initRepository(tag)
+    click.echo(f"drupal-dockerizer-{tag} downloaded.")
 
 
 def __up_project(force=False, conf_path=None):
@@ -208,10 +211,10 @@ def __up_project(force=False, conf_path=None):
     if not force and conf.data["compose_project_name"] in list(
         app_config.data["instances"].keys()
     ):
-        pl = Pull("up.yml", conf_path, tag)
+        pl = Playbook("up.yml", conf.data["drupal_root_dir"])
         app_config.upInstance(conf)
     else:
-        pl = Pull("main.yml", conf_path, tag, become=True)
+        pl = Playbook("main.yml", conf.data["drupal_root_dir"], become=True)
         app_config.addInstance(conf)
     pl.run()
     app_config.save()
@@ -238,7 +241,7 @@ def __down_project(conf_path=None):
     if not conf_path:
         conf_path = findConfigPath(CURRENT_DIR)
     conf = DockerizerConfig(CURRENT_DIR, conf_path)
-    pl = Pull("reset.yml", conf_path, tag, become=True)
+    pl = Playbook("reset.yml", conf.data["drupal_root_dir"], become=True)
     pl.run()
     app_config.removeInstance(conf)
     app_config.save()
@@ -259,7 +262,7 @@ def __stop_project(conf_path=None):
     if not conf_path:
         conf_path = findConfigPath(CURRENT_DIR)
     conf = DockerizerConfig(CURRENT_DIR, conf_path)
-    pl = Pull("stop.yml", conf_path, tag)
+    pl = Playbook("stop.yml", conf.data["drupal_root_dir"])
     pl.run()
     app_config.stopInstance(conf)
     app_config.save()
@@ -301,11 +304,10 @@ def instance(command, instance_name):
     """
     if "list" in command:
         instances = app_config.data.get("instances")
-        for instance in instances.keys():
-            click.echo(
-                f'{instance} is {instances[instance].get("status")}, '
-                f'domain {instances[instance].get("domain")}\r\n'
-            )
+        if len(instances) > 0:
+            click.echo(tabulate(instances.values(), headers="keys"))
+        else:
+            click.echo("No instaces")
         return
 
     instances_data = app_config.data["instances"][instance_name]
@@ -329,7 +331,7 @@ def import_db(filename):
     conf = DockerizerConfig(CURRENT_DIR, conf_path)
     conf.data["db_dump_path"] = filename
     conf.save()
-    pl = Pull("db.yml", conf_path, tag)
+    pl = Playbook("db.yml", conf_path, tag)
     pl.run()
 
 
@@ -340,8 +342,8 @@ def drush_commands(conf_path=None):
     """
     if not conf_path:
         conf_path = findConfigPath(CURRENT_DIR)
-    DockerizerConfig(CURRENT_DIR, conf_path)
-    pl = Pull("drush-commands.yml", conf_path, tag)
+    conf = DockerizerConfig(CURRENT_DIR, conf_path)
+    pl = Playbook("drush-commands.yml", conf.data["drupal_root_dir"])
     pl.run()
     click.echo(f"Drush commands from config done")
 
@@ -357,10 +359,15 @@ def composer(command):
     """
     Run composer inside docker conteiner
     """
+    user_uid = os.getuid()
+    user_gid = os.getgid()
+    # Fix for mac os platform
+    if platform.system() == "Darwin":
+        user_gid = 201
     os.system(
         f"docker run --rm --interactive --tty "
         f"--volume $PWD:/app "
-        f"--user $(id -u):$(id -g) "
+        f"--user {user_uid}:{user_gid} "
         f'composer --no-cache --ignore-platform-reqs {" ".join(command)}'
     )
 
