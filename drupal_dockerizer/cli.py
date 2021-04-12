@@ -331,7 +331,7 @@ def import_db(filename):
     conf = DockerizerConfig(CURRENT_DIR, conf_path)
     conf.data["db_dump_path"] = filename
     conf.save()
-    pl = Playbook("db.yml", conf_path, tag)
+    pl = Playbook("db.yml", conf.data["drupal_root_dir"])
     pl.run()
 
 
